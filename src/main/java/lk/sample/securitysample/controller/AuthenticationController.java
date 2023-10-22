@@ -27,12 +27,15 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @Autowired
-    private UserRepo userRepo;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signUp (@RequestBody SignUpRequest signUpRequest) {
-        return ResponseEntity.ok(authenticationService.signUp(signUpRequest));
+    public ResponseEntity<String> signUp(@RequestBody SignUpRequest signUpRequest) {
+        String username = signUpRequest.getUsername();
+        if (authenticationService.checkUserExists(username)) {
+            return ResponseEntity.badRequest().body("User Already Exists!");
+        }
+        boolean signupOK = null != authenticationService.signUp(signUpRequest);
+        return ResponseEntity.ok(signupOK ? "User Successfully Signed Up!" : "Sign up Unsuccessful!");
     }
 
     @PostMapping("/signin")
