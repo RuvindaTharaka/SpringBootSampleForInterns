@@ -85,4 +85,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return null;
     }
+
+    public boolean checkUserExists(String username) {
+        return userRepo.findByUsername(username).isPresent();
+    }
 }
